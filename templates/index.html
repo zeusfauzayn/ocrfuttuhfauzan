@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="header-section" style="text-align: center; margin-bottom: 3rem;">
+    <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">Handwriting <span
+            style="color: var(--primary);">Recognition</span></h1>
+    <p style="color: var(--text-dim); max-width: 600px; margin: 0 auto;">
+        Draw a digit (0-9) on the canvas below or upload an image to see our Convolutional Neural Network identify it in
+        real-time.
+    </p>
+</div>
+
+<div class="tool-grid">
+    <!-- Input Section -->
+    <div class="glass-card">
+        <h3 style="margin-top: 0;"><i class="fas fa-edit"></i> Input Area</h3>
+
+        <!-- Tabs -->
+        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+            <button class="btn btn-secondary active-tab" onclick="switchMode('draw')" id="btn-draw-mode">Draw</button>
+            <button class="btn btn-secondary" onclick="switchMode('upload')" id="btn-upload-mode">Upload</button>
+        </div>
+
+        <!-- Draw Mode -->
+        <div id="draw-area">
+            <div class="canvas-container">
+                <canvas id="drawingCanvas" width="280" height="280"></canvas>
+            </div>
+            <div class="controls">
+                <button class="btn btn-clear" onclick="clearCanvas()">
+                    <i class="fas fa-trash"></i> Clear
+                </button>
+                <button class="btn btn-primary" onclick="predictDrawing()" id="predict-btn">
+                    <span class="btn-text"><i class="fas fa-bolt"></i> Identify</span>
+                    <div class="loader"></div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Upload Mode -->
+        <div id="upload-area" style="display: none;">
+            <div class="drop-zone" id="drop-zone">
+                <i class="fas fa-cloud-upload-alt"
+                    style="font-size: 3rem; color: var(--text-dim); margin-bottom: 1rem;"></i>
+                <p>Drag & Drop image here or click to browse</p>
+                <input type="file" id="file-input" accept="image/*" hidden>
+            </div>
+            <div id="preview-container" style="display: none; text-align: center; margin-bottom: 1rem;">
+                <img id="image-preview" style="max-width: 100%; max-height: 200px; border-radius: 8px;">
+            </div>
+            <div class="controls">
+                <button class="btn btn-primary" onclick="predictUpload()" id="upload-predict-btn" disabled>
+                    <span class="btn-text"><i class="fas fa-bolt"></i> Identify</span>
+                    <div class="loader"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Section -->
+    <div class="glass-card">
+        <h3 style="margin-top: 0;"><i class="fas fa-microchip"></i> AI Analysis</h3>
+        <div class="result-display" id="result-box">
+            <p style="color: var(--text-dim);">The neural network is waiting for input...</p>
+            <div style="font-size: 4rem; opacity: 0.1;">
+                <i class="fas fa-brain"></i>
+            </div>
+        </div>
+
+        <!-- Template for result (hidden initially) -->
+        <div id="result-content" style="display: none;">
+            <div class="prediction-box" id="prediction-digit">?</div>
+            <p style="text-align: center; color: var(--text-dim);">Confidence Score</p>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <span id="confidence-text">0%</span>
+                <div class="confidence-bar">
+                    <div class="confidence-fill" id="confidence-bar-fill"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

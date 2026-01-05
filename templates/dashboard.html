@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="header-section" style="margin-bottom: 2rem;">
+    <h1>CNN <span style="color: var(--accent);">Dashboard</span></h1>
+    <p style="color: var(--text-dim);">Understanding how the Convolutional Neural Network processes visual data.</p>
+</div>
+
+<!-- Stats Row -->
+<div class="stats-grid">
+    <div class="glass-card stat-card">
+        <i class="fas fa-check-circle" style="font-size: 2rem; color: var(--accent);"></i>
+        <div class="stat-value">99.2%</div>
+        <p>Training Accuracy</p>
+    </div>
+    <div class="glass-card stat-card">
+        <i class="fas fa-layer-group" style="font-size: 2rem; color: var(--primary);"></i>
+        <div class="stat-value">5</div>
+        <p>Neural Layers</p>
+    </div>
+    <div class="glass-card stat-card">
+        <i class="fas fa-database" style="font-size: 2rem; color: #f59e0b;"></i>
+        <div class="stat-value">60,000</div>
+        <p>Training Images</p>
+    </div>
+</div>
+
+<div class="tool-grid">
+    <div class="glass-card">
+        <h3><i class="fas fa-network-wired"></i> Architecture Visualization</h3>
+        <canvas id="architectureChart"></canvas>
+    </div>
+
+    <div class="glass-card info-section">
+        <h3><i class="fas fa-book-open"></i> How it Works</h3>
+        <p>
+            <strong>1. Input Layer:</strong> Accepts a 28x28 grayscale image (pixel values 0-255).
+        </p>
+        <p>
+            <strong>2. Convolutional Layers:</strong> Filters scroll over the image to detect features like edges,
+            curves, and strokes. This is where the "vision" happens.
+        </p>
+        <p>
+            <strong>3. Pooling Layers:</strong> Reduces the size of the image data while keeping important features,
+            making processing faster.
+        </p>
+        <p>
+            <strong>4. Fully Connected Layer:</strong> Takes all the detected features and decides which digit (0-9) is
+            most likely represented.
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('architectureChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Conv2D (1)', 'MaxPool (1)', 'Conv2D (2)', 'MaxPool (2)', 'Dense (FC)'],
+                datasets: [{
+                    label: 'Parameters per Layer',
+                    data: [320, 0, 18496, 0, 102464],
+                    backgroundColor: [
+                        'rgba(59, 130, 246, 0.5)',
+                        'rgba(148, 163, 184, 0.5)',
+                        'rgba(59, 130, 246, 0.7)',
+                        'rgba(148, 163, 184, 0.5)',
+                        'rgba(16, 185, 129, 0.8)'
+                    ],
+                    borderColor: 'rgba(255,255,255,0.1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: '#94a3b8' } }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#94a3b8' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#94a3b8' }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
